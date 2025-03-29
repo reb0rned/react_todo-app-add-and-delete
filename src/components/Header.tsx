@@ -3,50 +3,55 @@ import { Todo } from '../types/Todo';
 import { createTodo, USER_ID } from '../api/todos';
 import { ErrorType } from '../types/Error';
 
-
 type Props = {
-  todos: Todo[]
-  setTodos: (array: Todo[]) => void
-  setError: (value: ErrorType, time?: number) => void
-  setTempTodo: (value: Todo | null) => void
-  tempTodo: Todo | null
-}
+  todos: Todo[];
+  setTodos: (array: Todo[]) => void;
+  setError: (value: ErrorType, time?: number) => void;
+  setTempTodo: (value: Todo | null) => void;
+  tempTodo: Todo | null;
+};
 
 export const Header: React.FC<Props> = ({
   todos,
   setTodos,
   setError,
   setTempTodo,
-  tempTodo
+  tempTodo,
 }) => {
-  const [title, setTitle] = useState('')
-  const inputFocus = useRef<HTMLInputElement>(null)
+  const [title, setTitle] = useState('');
+  const inputFocus = useRef<HTMLInputElement>(null);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!title.trim()) {
-      setError(ErrorType.empty_value, 3000)
-      return
+      setError(ErrorType.empty_value, 3000);
+
+      return;
     }
 
-    try{
-      setTempTodo({title: title, id: 0, completed: false, userId: USER_ID})
-      const newTodo = await createTodo({title: title.trim(), completed: false, userId: USER_ID})
-      setTodos([...todos, newTodo])
-      setTitle('')
-    } catch(err) {
-      setError(ErrorType.adding_error, 3000)
+    try {
+      setTempTodo({ title: title, id: 0, completed: false, userId: USER_ID });
+      const newTodo = await createTodo({
+        title: title.trim(),
+        completed: false,
+        userId: USER_ID,
+      });
+
+      setTodos([...todos, newTodo]);
+      setTitle('');
+    } catch (err) {
+      setError(ErrorType.adding_error, 3000);
     } finally {
-      setTempTodo(null)
+      setTempTodo(null);
     }
-  }
+  };
 
   useEffect(() => {
     if (inputFocus.current) {
-      inputFocus.current.focus()
+      inputFocus.current.focus();
     }
-  }, [tempTodo, todos])
+  }, [tempTodo, todos]);
 
   return (
     <header className="todoapp__header">
@@ -57,9 +62,7 @@ export const Header: React.FC<Props> = ({
         data-cy="ToggleAllButton"
       />
 
-      <form
-      onSubmit={submitHandler}
-      >
+      <form onSubmit={submitHandler}>
         <input
           ref={inputFocus}
           data-cy="NewTodoField"
@@ -67,8 +70,8 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(event) => {
-            setTitle(event.target.value)
+          onChange={event => {
+            setTitle(event.target.value);
           }}
           disabled={tempTodo !== null}
         />

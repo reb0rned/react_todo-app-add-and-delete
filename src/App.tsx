@@ -10,14 +10,14 @@ import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { ErrorType } from './types/Error';
 import { TodoStatus } from './types/TodoStatus';
-import { useErrorHandler } from './hooks/useErrorHandler'
+import { useErrorHandler } from './hooks/useErrorHandler';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<TodoStatus>(TodoStatus.all);
-  const [tempTodo, setTempTodo] = useState<Todo | null>(null)
-  const {error, handleError} = useErrorHandler()
-  const [loading, setLoading] = useState<number[]>([])
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const { error, handleError } = useErrorHandler();
+  const [loading, setLoading] = useState<number[]>([]);
 
   const receiveData = async () => {
     try {
@@ -36,32 +36,32 @@ export const App: React.FC = () => {
   };
 
   const deleteItemFromTodos = (id: number) => {
-    setTodos(prevTodos =>
-      prevTodos.filter(todo => todo.id !== id)
-    )
-  }
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
 
   const clearAllCompletedTodos = async () => {
-    const completedTodos = todos.filter(todo => todo.completed)
-    const completedTodosIds = completedTodos.map(todo => todo.id)
-    setLoading(completedTodosIds)
+    const completedTodos = todos.filter(todo => todo.completed);
+    const completedTodosIds = completedTodos.map(todo => todo.id);
+
+    setLoading(completedTodosIds);
 
     try {
-      const deleteRequests = completedTodosIds.map(async (todoId) => {
+      const deleteRequests = completedTodosIds.map(async todoId => {
         try {
-          await deleteTodos(todoId)
-          deleteItemFromTodos(todoId)
+          await deleteTodos(todoId);
+          deleteItemFromTodos(todoId);
         } catch {
-          handleError(ErrorType.delete_error, 3000)
+          handleError(ErrorType.delete_error, 3000);
         }
-      })
-      Promise.allSettled(deleteRequests)
+      });
+
+      Promise.allSettled(deleteRequests);
     } catch {
-      handleError(ErrorType.delete_error, 3000)
+      handleError(ErrorType.delete_error, 3000);
     } finally {
-      setLoading([])
+      setLoading([]);
     }
-  }
+  };
 
   const filterData = (filterBy: TodoStatus) => {
     switch (filterBy) {
@@ -92,11 +92,11 @@ export const App: React.FC = () => {
 
           <div className="todoapp__content">
             <Header
-            setTodos={setTodos}
-            todos={todos}
-            setError={handleError}
-            setTempTodo={setTempTodo}
-            tempTodo={tempTodo}
+              setTodos={setTodos}
+              todos={todos}
+              setError={handleError}
+              setTempTodo={setTempTodo}
+              tempTodo={tempTodo}
             />
 
             {todos.length > 0 && (

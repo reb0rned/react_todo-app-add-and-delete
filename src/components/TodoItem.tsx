@@ -10,10 +10,10 @@ import { ErrorType } from '../types/Error';
 type Props = {
   todo: Todo;
   setUpdateTodoStatus: (id: number, status: boolean) => void;
-  isTemp?: boolean,
-  setError: (value: ErrorType, time?: number) => void,
-  setDeleteItemFromTodos: (id: number) => void,
-  loading: number[],
+  isTemp?: boolean;
+  setError: (value: ErrorType, time?: number) => void;
+  setDeleteItemFromTodos: (id: number) => void;
+  loading: number[];
   setLoading: Dispatch<SetStateAction<number[]>>;
 };
 
@@ -24,29 +24,28 @@ export const TodoItem: React.FC<Props> = ({
   setError,
   setDeleteItemFromTodos,
   loading,
-  setLoading
+  setLoading,
 }) => {
-
   const settingStatus = async (id: number, newStatus: boolean) => {
     try {
       await updateTodos(id, { completed: newStatus });
       setUpdateTodoStatus(id, newStatus);
     } catch (e) {
-      setError(ErrorType.update_error, 3000)
+      setError(ErrorType.update_error, 3000);
     }
   };
 
   const onDeleteBtnHandler = async (id: number) => {
     try {
       setLoading((prev: number[]) => [...prev, id]);
-      await deleteTodos(id)
-      setDeleteItemFromTodos(id)
+      await deleteTodos(id);
+      setDeleteItemFromTodos(id);
     } catch {
-      setError(ErrorType.delete_error, 3000)
+      setError(ErrorType.delete_error, 3000);
     } finally {
-      setLoading(prev => prev.filter(todoId => todoId !== id))
+      setLoading(prev => prev.filter(todoId => todoId !== id));
     }
-  }
+  };
 
   return (
     <div
@@ -73,17 +72,20 @@ export const TodoItem: React.FC<Props> = ({
       </span>
 
       <button
-      type="button"
-      className="todo__remove"
-      data-cy="TodoDelete"
-      onClick={() => onDeleteBtnHandler(todo.id)}
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={() => onDeleteBtnHandler(todo.id)}
       >
         ×
       </button>
 
-      <div data-cy="TodoLoader" className={cn("modal overlay", {
-        'is-active': isTemp || loading.includes(todo.id)
-      })}>
+      <div
+        data-cy="TodoLoader"
+        className={cn('modal overlay', {
+          'is-active': isTemp || loading.includes(todo.id),
+        })}
+      >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

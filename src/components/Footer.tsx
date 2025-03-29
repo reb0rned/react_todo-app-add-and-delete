@@ -6,10 +6,9 @@ import { Todo } from '../types/Todo';
 type Props = {
   filterBy: TodoStatus;
   setFilterBy: (value: TodoStatus) => void;
-  todos: Todo[]
-  clearAllCompletedTodos: () => void
+  todos: Todo[];
+  clearAllCompletedTodos: () => void;
 };
-
 
 export const Footer: React.FC<Props> = ({
   filterBy,
@@ -18,7 +17,7 @@ export const Footer: React.FC<Props> = ({
   clearAllCompletedTodos,
 }) => {
   const activeCount = todos.filter(todo => !todo.completed).length;
-  const isCompletedInTodos = todos.some(todo => todo.completed)
+  const isCompletedInTodos = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
